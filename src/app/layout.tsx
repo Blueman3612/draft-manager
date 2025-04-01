@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,11 +12,15 @@ export const metadata: Metadata = {
   description: "Softball League Draft Management System",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const supabase = createServerComponentClient({ cookies });
+  const { data: { session } } = await supabase.auth.getSession();
+  const isAuthenticated = !!session;
+
   return (
     <html lang="en" className="h-full bg-gray-50">
       <body className={`${inter.className} h-full`}>
@@ -35,14 +41,47 @@ export default function RootLayout({
                   >
                     Draft Board
                   </Link>
+                  {isAuthenticated && (
+                    <>
+                      <Link
+                        href="/teams"
+                        className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 hover:text-blue-600"
+                      >
+                        Teams
+                      </Link>
+                      <Link
+                        href="/players"
+                        className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 hover:text-blue-600"
+                      >
+                        Players
+                      </Link>
+                      <Link
+                        href="/settings"
+                        className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 hover:text-blue-600"
+                      >
+                        Settings
+                      </Link>
+                    </>
+                  )}
                 </div>
                 <div className="flex items-center">
-                  <Link
-                    href="/login"
-                    className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                  >
-                    Sign In
-                  </Link>
+                  {!isAuthenticated ? (
+                    <Link
+                      href="/login"
+                      className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    >
+                      Sign In
+                    </Link>
+                  ) : (
+                    <form action="/auth/signout" method="post">
+                      <button
+                        type="submit"
+                        className="inline-flex items-center justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                      >
+                        Sign Out
+                      </button>
+                    </form>
+                  )}
                 </div>
               </div>
             </nav>
