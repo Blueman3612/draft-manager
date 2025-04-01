@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { mockTeams, mockPlayers, mockDraftPicks } from '@/lib/mockData';
+import { Button } from '@/components/ui/Button';
 
 export default function TeamDraftPage({ params }: { params: { teamId: string } }) {
   const team = mockTeams.find(t => t.id === params.teamId);
@@ -55,9 +56,9 @@ export default function TeamDraftPage({ params }: { params: { teamId: string } }
                         AVG: {player.stats.avg} | HR: {player.stats.hr} | RBI: {player.stats.rbi}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
-                        <button className="text-blue-600 hover:text-blue-900">
+                        <Button variant="ghost" size="sm">
                           Draft
-                        </button>
+                        </Button>
                       </td>
                     </tr>
                   ))}

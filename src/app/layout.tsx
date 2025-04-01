@@ -4,6 +4,8 @@ import "./globals.css";
 import Link from "next/link";
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
+import { Button } from '@/components/ui/Button';
+import { Tab } from '@/components/ui/Tab';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,52 +36,26 @@ export default async function RootLayout({
                     Draft Manager
                   </Link>
                 </div>
-                <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                  <Link
-                    href="/draft"
-                    className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 hover:text-blue-600"
-                  >
-                    Draft Board
-                  </Link>
+                <div className="hidden sm:ml-6 sm:flex sm:space-x-1">
+                  <Tab href="/draft">Draft Board</Tab>
                   {isAuthenticated && (
                     <>
-                      <Link
-                        href="/teams"
-                        className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 hover:text-blue-600"
-                      >
-                        Teams
-                      </Link>
-                      <Link
-                        href="/players"
-                        className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 hover:text-blue-600"
-                      >
-                        Players
-                      </Link>
-                      <Link
-                        href="/settings"
-                        className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 hover:text-blue-600"
-                      >
-                        Settings
-                      </Link>
+                      <Tab href="/teams">Teams</Tab>
+                      <Tab href="/players">Players</Tab>
+                      <Tab href="/settings">Settings</Tab>
                     </>
                   )}
                 </div>
                 <div className="flex items-center">
                   {!isAuthenticated ? (
-                    <Link
-                      href="/login"
-                      className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                    >
-                      Sign In
+                    <Link href="/login">
+                      <Button>Sign In</Button>
                     </Link>
                   ) : (
                     <form action="/auth/signout" method="POST">
-                      <button
-                        type="submit"
-                        className="inline-flex items-center justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                      >
+                      <Button variant="outline" type="submit">
                         Sign Out
-                      </button>
+                      </Button>
                     </form>
                   )}
                 </div>

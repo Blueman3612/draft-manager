@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { Button } from '@/components/ui/Button';
+import { TextInput } from '@/components/ui/TextInput';
 
 // Mock data - replace with real data from your database
 const mockPlayers = [
@@ -28,31 +30,24 @@ export default function PlayersPage() {
           </p>
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <button
-            type="button"
-            className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
+          <Button>
             Add Player
-          </button>
+          </Button>
         </div>
       </div>
 
       <div className="mt-8">
         <div className="mb-6">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search players..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="block w-full rounded-md border-gray-300 pl-10 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-            />
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <TextInput
+            placeholder="Search players..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            icon={
               <svg className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
               </svg>
-            </div>
-          </div>
+            }
+          />
         </div>
 
         <div className="mt-8 flex flex-col">
@@ -101,12 +96,12 @@ export default function PlayersPage() {
                           {player.stats.rbi}
                         </td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
-                          <button className="text-blue-600 hover:text-blue-900 mr-4">
+                          <Button variant="ghost" size="sm" className="mr-4">
                             Edit
-                          </button>
-                          <button className="text-red-600 hover:text-red-900">
+                          </Button>
+                          <Button variant="destructive" size="sm">
                             Delete
-                          </button>
+                          </Button>
                         </td>
                       </tr>
                     ))}
