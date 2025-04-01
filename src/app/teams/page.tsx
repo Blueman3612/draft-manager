@@ -1,8 +1,6 @@
-import Layout from '@/components/layout/Layout';
-
 export default function TeamsPage() {
   return (
-    <Layout>
+    <>
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-3xl font-semibold text-gray-900">Teams</h1>
@@ -85,6 +83,6 @@ export default function TeamsPage() {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 } 

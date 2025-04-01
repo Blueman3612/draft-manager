@@ -24,34 +24,22 @@ export default function RootLayout({
             <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex h-16 justify-between items-center">
                 <div className="flex items-center">
-                  <Link href="/" className="text-2xl font-bold text-primary-600">
+                  <Link href="/" className="text-2xl font-bold text-blue-600">
                     Draft Manager
                   </Link>
                 </div>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                   <Link
                     href="/draft"
-                    className="inline-flex items-center px-1 pt-1 text-sm font-medium text-secondary-900 hover:text-primary-600"
+                    className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 hover:text-blue-600"
                   >
                     Draft Board
-                  </Link>
-                  <Link
-                    href="/admin/teams"
-                    className="inline-flex items-center px-1 pt-1 text-sm font-medium text-secondary-900 hover:text-primary-600"
-                  >
-                    Teams
-                  </Link>
-                  <Link
-                    href="/admin/players"
-                    className="inline-flex items-center px-1 pt-1 text-sm font-medium text-secondary-900 hover:text-primary-600"
-                  >
-                    Players
                   </Link>
                 </div>
                 <div className="flex items-center">
                   <Link
                     href="/login"
-                    className="btn btn-primary"
+                    className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   >
                     Sign In
                   </Link>
@@ -66,9 +54,9 @@ export default function RootLayout({
           </main>
 
           {/* Footer */}
-          <footer className="bg-white border-t border-secondary-200">
+          <footer className="bg-white border-t border-gray-200">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-              <div className="text-center text-sm text-secondary-500">
+              <div className="text-center text-sm text-gray-500">
                 <p>© {new Date().getFullYear()} Softball League Draft Manager. All rights reserved.</p>
               </div>
             </div>
