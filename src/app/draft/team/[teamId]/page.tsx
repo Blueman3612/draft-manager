@@ -1,113 +1,79 @@
 'use client';
 
 import { useState } from 'react';
-import Header from '@/components/layout/Header';
-import DraftTable from '@/components/draft/DraftTable';
-import PlayerSelection from '@/components/draft/PlayerSelection';
-import { 
-  mockTeams, 
-  mockDraftPicks,
-  mockPlayers,
-  getAvailablePlayers,
-  getFormattedDraftPicks,
-  getTeamName,
-  getCurrentPick
-} from '@/lib/mockData';
-import { Player } from '@/lib/types';
+import { mockTeams, mockPlayers, mockDraftPicks } from '@/lib/mockData';
 
 export default function TeamDraftPage({ params }: { params: { teamId: string } }) {
-  const { teamId } = params;
-  const [draftPicks, setDraftPicks] = useState(mockDraftPicks);
-  const [availablePlayers, setAvailablePlayers] = useState(getAvailablePlayers());
-  
-  const teamName = getTeamName(teamId);
-  const currentPick = getCurrentPick();
-  const isTeamsTurn = currentPick.teamId === teamId;
-  
-  const handleSelectPlayer = (player: Player) => {
-    if (!isTeamsTurn) {
-      alert("It's not your team's turn to draft");
-      return;
-    }
-    
-    // This is just a wireframe simulation
-    alert(`Drafted ${player.name} for ${teamName}`);
-  };
-  
-  // Get drafted players for this team
-  const teamRoster = draftPicks
-    .filter(pick => pick.team_id === teamId)
-    .map(pick => {
-      const player = mockPlayers.find(p => p.id === pick.player_id);
-      return {
-        ...pick,
-        playerName: player ? player.name : 'Unknown',
-        position: player ? player.position : 'Unknown'
-      };
-    });
+  const team = mockTeams.find(t => t.id === params.teamId);
+  // Filter out players who have been drafted
+  const availablePlayers = mockPlayers.filter(p => 
+    !mockDraftPicks.some(pick => pick.player_id === p.id)
+  );
   
   return (
-    <main className="min-h-screen">
-      <Header userRole="manager" teamName={teamName} />
-      
-      <div className="max-w-6xl mx-auto p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">DRAFT BOARD</h1>
-          
-          {isTeamsTurn ? (
-            <div className="bg-green-100 text-green-800 px-4 py-2 rounded-md">
-              YOUR PICK: #{currentPick.pickNumber}
-            </div>
-          ) : (
-            <div className="text-gray-500">
-              Waiting for pick #{currentPick.pickNumber} ({getTeamName(currentPick.teamId)})
-            </div>
-          )}
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="sm:flex sm:items-center">
+        <div className="sm:flex-auto">
+          <h1 className="text-2xl font-semibold text-gray-900">Team Draft: {team?.name}</h1>
+          <p className="mt-2 text-sm text-gray-700">
+            Select players for your team during your draft picks.
+          </p>
         </div>
-        
-        <div className="mb-8">
-          <DraftTable draftPicks={draftPicks} />
-        </div>
-        
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">AVAILABLE PLAYERS</h2>
-          <PlayerSelection 
-            players={availablePlayers} 
-            onSelectPlayer={handleSelectPlayer} 
-          />
-        </div>
-        
-        <div>
-          <h2 className="text-xl font-semibold mb-3">YOUR TEAM</h2>
-          <div className="border rounded-md overflow-x-auto">
-            <table className="min-w-full border-collapse">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="py-2 px-4 text-left">Name</th>
-                  <th className="py-2 px-4 text-left">Position</th>
-                  <th className="py-2 px-4 text-left">Pick #</th>
-                </tr>
-              </thead>
-              <tbody>
-                {teamRoster.map((pick) => (
-                  <tr key={pick.id} className="border-b border-gray-100">
-                    <td className="py-2 px-4">{pick.playerName}</td>
-                    <td className="py-2 px-4">{pick.position}</td>
-                    <td className="py-2 px-4">#{pick.pick_number}</td>
-                  </tr>
-                ))}
-                {teamRoster.length === 0 && (
+      </div>
+
+      <div className="mt-8 flex flex-col">
+        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="inline-block min-w-full py-2 align-middle">
+            <div className="overflow-hidden shadow-sm ring-1 ring-black ring-opacity-5">
+              <table className="min-w-full divide-y divide-gray-300">
+                <thead className="bg-gray-50">
                   <tr>
-                    <td colSpan={3} className="py-4 text-center text-gray-500">
-                      No players drafted yet
-                    </td>
+                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
+                      Name
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Position
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Stats
+                    </th>
+                    <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
+                      <span className="sr-only">Actions</span>
+                    </th>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-gray-200 bg-white">
+                  {availablePlayers.map((player) => (
+                    <tr key={player.id}>
+                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
+                        {player.name}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {player.position}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        AVG: {player.stats.avg} | HR: {player.stats.hr} | RBI: {player.stats.rbi}
+                      </td>
+                      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
+                        <button className="text-blue-600 hover:text-blue-900">
+                          Draft
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {availablePlayers.length === 0 && (
+                    <tr>
+                      <td colSpan={4} className="py-4 text-center text-gray-500">
+                        No available players
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 } 
